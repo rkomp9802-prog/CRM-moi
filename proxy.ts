@@ -7,7 +7,7 @@ import { SESSION_COOKIE, verifySession } from '@/lib/auth';
 
 // Приём заявок с сайта сессии не требует — он закрыт ключом внутри самого роута.
 const PUBLIC_API = ['/api/auth/login', '/api/public/leads'];
-const ADMIN_ONLY = ['/users', '/api/users'];
+const ADMIN_ONLY = ['/users', '/api/users', '/settings', '/api/integrations'];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -47,6 +47,8 @@ export const config = {
     '/tasks/:path*',
     '/users/:path*',
     '/profile/:path*',
+    '/assistant/:path*',
+    '/settings/:path*',
     '/api/:path*',
   ],
 };

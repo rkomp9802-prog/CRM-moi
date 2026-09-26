@@ -3,6 +3,7 @@ import type { NextRequest } from 'next/server';
 import { badRequest, readJson, ApiError } from '@/lib/api';
 import { createLeadFromWebsite } from '@/lib/leads';
 import { rateLimit } from '@/lib/rate-limit';
+import { notifyNewLead } from '@/lib/telegram';
 
 /**
  * Публичный приём заявок с формы обратной связи на сайте (раздел 13.1 спеки).
@@ -84,6 +85,10 @@ export async function POST(request: NextRequest) {
     const message = typeof body.message === 'string' ? body.message.slice(0, 5000) : null;
 
     const { lead, clientCreated } = await createLeadFromWebsite({ name, phone, email, message });
+
+    // Уведомление в Telegram — после записи в базу и без await-зависимости от результата:
+    // заявка уже принята, и молчащий бот не повод отвечать сайту ошибкой.
+    await notifyNewLead({ name, phone, email, message, source: 'Форма на сайте' });
 
     return Response.json({ ok: true, leadId: lead.id, clientCreated }, { status: 201, headers });
   } catch (error) {

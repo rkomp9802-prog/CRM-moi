@@ -9,7 +9,9 @@ const links = [
   { href: '/leads', label: 'Заявки' },
   { href: '/clients', label: 'Клиенты' },
   { href: '/tasks', label: 'Задачи' },
+  { href: '/assistant', label: 'Ассистент' },
   { href: '/users', label: 'Сотрудники', adminOnly: true },
+  { href: '/settings', label: 'Интеграции', adminOnly: true },
 ] as const;
 
 interface Props {
